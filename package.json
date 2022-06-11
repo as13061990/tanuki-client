@@ -1,0 +1,22 @@
+{
+  "name": "tanuki-client",
+  "version": "1.0.0",
+  "description": "client side tanuki telegram web-app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vsrodionov94/tanuki-client.git"
+  },
+  "keywords": [
+    "telegram"
+  ],
+  "author": "Vladimir Rodionov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vsrodionov94/tanuki-client/issues"
+  },
+  "homepage": "https://github.com/vsrodionov94/tanuki-client#readme"
+}
