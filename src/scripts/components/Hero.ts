@@ -1,26 +1,33 @@
-import MovableObjects from './MovableObjects';
+export default class Hero extends Phaser.Physics.Arcade.Sprite {
+  public body: Phaser.Physics.Arcade.Body;
 
-export default class Hero extends MovableObjects {
   constructor(data: HeroData) {
-    super({
-      scene: data.scene,
-      x: data.x,
-      y: data.y,
-      texture: 'hero-run',
-      velocity: 100,
-    });
-    this.setScale(5); // нужно будет убрать потом
-    this.setBounce(0.2);
-    this.setCollideWorldBounds(true);
-    this.body.setGravityY(300);
-    
+    super(data.scene, data.x, data.y, 'hero-run');
+
+    this.init();
     this.jump();
+  }
+
+  public init(): void {
+    this.scene.add.existing(this);
+    this.scene.physics.add.existing(this);
+    this.body.setCircle(8).setOffset(4, 4);
+    this.setScale(5);
+    this.setCollideWorldBounds(true);
+    this.body.enable = true;
+
+    this.body.setGravityY(500);
   }
 
   private jump() {
     this.scene.input.keyboard.createCursorKeys().space.on('down', (): void => {
-      this.setVelocityY(-300)
+      if (this.body.touching.down) this.setVelocityY(-500);
     });
+  }
+
+  protected preUpdate(time: number, delta: number): void {
+    super.preUpdate(time, delta);
+    this.play(this.body.touching.down ? 'run' : 'jump', true);
   }
 };
 

@@ -4,6 +4,7 @@ const heroJump: string = require('../../assets/images/hero/jump.png');
 const heroDepth: string = require('../../assets/images/hero/depth.png');
 const bg: string = require('../../assets/images/tiles/bg.png');
 const ground: string = require('../../assets/images/tiles/ground.png');
+const testObstacle: string = require('../../assets/images/obstacles/test.png');
 
 export default class Boot extends Phaser.Scene {
   constructor() {
@@ -13,8 +14,9 @@ export default class Boot extends Phaser.Scene {
   public preload(): void {
     this.load.spritesheet('hero-run', heroRun, { frameWidth: 24, frameHeight: 24 });
     this.load.spritesheet('hero-idle', heroIdle, { frameWidth: 24, frameHeight: 24 });
-    this.load.spritesheet('hero-depth', heroJump, { frameWidth: 24, frameHeight: 24 });
-    this.load.spritesheet('hero-jump', heroDepth, { frameWidth: 24, frameHeight: 24 });
+    this.load.spritesheet('hero-depth', heroDepth, { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('hero-jump', heroJump, { frameWidth: 24, frameHeight: 24 });
+    this.load.spritesheet('barrier', testObstacle, { frameWidth: 32, frameHeight: 32 });
     this.load.image('tile-bg', bg);
     this.load.image('tile-ground', ground);
   }
