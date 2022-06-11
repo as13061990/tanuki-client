@@ -1,6 +1,7 @@
 import '../css/style.css';
 import * as Phaser from 'phaser';
 import Boot from './scenes/Boot';
+import Game from './scenes/Game';
 
 const gcd = (num1: number, num2: number): number => {
   while (num1 && num2) num1 > num2 ? num1 %= num2 : num2 %= num1;
@@ -46,13 +47,14 @@ window.onload = (): void => {
       parent: 'root',
       physics: {
         default: 'arcade',
-        arcade: { debug: false }
+        arcade: { debug: true }
       },
       render: {
         transparent: true // прозрачность канваса
       },
       scene: [
         Boot,
+        Game,
       ],
       loader: { maxParallelDownloads: 128 },
     }
