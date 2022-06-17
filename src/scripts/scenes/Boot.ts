@@ -1,6 +1,7 @@
 import * as Webfont from '../libs/Webfonts.js';
 
 const hero: string = require('../../assets/images/hero/hero.png');
+const heroShield: string = require('../../assets/images/hero/shield.png');
 const car: string = require('../../assets/images/car.png');
 const city: string = require('../../assets/images/city.png');
 const road: string = require('../../assets/images/road.png');
@@ -35,6 +36,7 @@ export default class Boot extends Phaser.Scene {
   public preload(): void {
     this.load.spritesheet('hero', hero, { frameWidth: 1418, frameHeight: 1521 });
     this.load.spritesheet('car', car, { frameWidth: 2411, frameHeight: 781 });
+    this.load.image('hero-shield', heroShield);
     this.load.image('tile-bg', bg);
     this.load.image('tile-ground', ground);
     this.load.image('background', background);

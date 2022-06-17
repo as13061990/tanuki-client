@@ -1,4 +1,5 @@
 import Obstacle, { Obstacles } from "./Obstacle";
+const randomBoolean = [ true, true, true, true, true, false ];
 
 export default class ObstacleSpawner extends Phaser.Physics.Arcade.Group {
   private timer: Phaser.Time.TimerEvent;
@@ -10,14 +11,16 @@ export default class ObstacleSpawner extends Phaser.Physics.Arcade.Group {
 
   private init(): void {
     this.scene.add.existing(this);
+    this.spawn(this.getRandomObstacle());
     this.timer = this.scene.time.addEvent({
-      delay: 2500,
+      delay: 2000,
       callback: () => {
-        this.spawn(this.getRandomObstacle());
+        if (Phaser.Utils.Array.GetRandom(randomBoolean)) {
+          this.spawn(this.getRandomObstacle());
+        }
       },
       repeat: -1,
     });
-    this.spawn(this.getRandomObstacle());
   }
 
   public stopTimer(): void {

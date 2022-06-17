@@ -1,5 +1,5 @@
 import Boost, { Boosts } from "./Boost";
-
+const randomBoolean = [ true, false, false, false ];
 export default class BoostSpawner extends Phaser.Physics.Arcade.Group {
   private timer: Phaser.Time.TimerEvent;
   
@@ -11,9 +11,11 @@ export default class BoostSpawner extends Phaser.Physics.Arcade.Group {
   private init(): void {
     this.scene.add.existing(this);
     this.timer = this.scene.time.addEvent({
-      delay: 3750,
+      delay: 900,
       callback: () => {
-        this.spawn(this.getRandomBoost());
+        if (Phaser.Utils.Array.GetRandom(randomBoolean)) {
+          this.spawn(this.getRandomBoost());
+        }
       },
       repeat: -1,
     });

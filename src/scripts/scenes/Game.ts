@@ -11,6 +11,7 @@ export default class Game extends Phaser.Scene {
   private bg: Phaser.GameObjects.TileSprite;
   private road: Phaser.GameObjects.TileSprite;
   private scoreText: Phaser.GameObjects.Text;
+  private hero: Hero;
   private car: Car;
   constructor() {
     super('Game');
@@ -30,22 +31,20 @@ export default class Game extends Phaser.Scene {
     }).setOrigin(0.5);
 
 
-    const hero = new Hero({ scene: this, x: 250, y: displayHeight - 400 });
+    this.hero = new Hero({ scene: this, x: 250, y: displayHeight - 400 });
     this.car = new Car({ scene: this, x: 80, y: displayHeight - 370 });
-    this.add.sprite(100, displayHeight - 370, 'car', 1);
-
 
     const groundGroup = this.physics.add.staticGroup();
     groundGroup.create(centerX, displayHeight - 270, 'tile-ground');
 
-    this.physics.add.collider(hero, groundGroup);
+    this.physics.add.collider(this.hero, groundGroup);
 
     const obstacleSpawner = new ObstacleSpawner(this);
     const boostSpawner = new BoostSpawner(this);
 
-    this.physics.add.overlap(hero, obstacleSpawner, this.onOverlap, undefined, this);
+    this.physics.add.overlap(this.hero, obstacleSpawner, this.onOverlap, undefined, this);
     this.physics.add.overlap(this.car, obstacleSpawner, this.incrementScore, undefined, this);
-    this.physics.add.overlap(hero, boostSpawner, this.onBoostOverlap, undefined, this);
+    this.physics.add.overlap(this.hero, boostSpawner, this.onBoostOverlap, undefined, this);
     
     this.createCityBackground();
 
@@ -53,15 +52,19 @@ export default class Game extends Phaser.Scene {
   }
 
   public onOverlap(hero: Hero, target: MovableObjects): void {
-    if (hero.isDamaged) return;
-    target.destroy();
-    hero.takeDamage();
-    this.car.move(true);
+    if (hero.isDamaged || hero.hasShield) {
+      target.destroy();
+    } else {
+      target.destroy();
+      hero.takeDamage();
+      this.car.move(hero.currentHealth);
+    }
   } 
 
   public incrementScore(source: Phaser.Physics.Arcade.Sprite, target: MovableObjects): void {
     this.score += 3;
     target.destroy();
+    this.hero.spawnText('+3');
     console.log(this.score);
   }
 
@@ -69,17 +72,28 @@ export default class Game extends Phaser.Scene {
     switch (boost.type) {
       case Boosts.Girls:
         this.score += 50;
+        hero.spawnText('+50');
         break;
       case Boosts.Rolls:
         this.score += 20;
+        hero.spawnText('+20');
         break;
       case Boosts.Speed:
+        if (hero.currentHealth < 3) {
+          hero.incHealth();
+          this.car.move(hero.currentHealth);
+        }
         break;
       case Boosts.Shield:
+        hero.setShield();
         break;
     }
 
     boost.destroy();
+  }
+
+  private endGame(): void {
+    this.scene.restart();
   }
 
   public update(): void {
@@ -88,6 +102,10 @@ export default class Game extends Phaser.Scene {
 
     if (this.scoreText.text != this.score.toString()) {
       this.scoreText.text = this.score.toString();
+    }
+
+    if (this.hero.currentHealth <= 0) {
+      this.endGame();
     }
   }
 

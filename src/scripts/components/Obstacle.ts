@@ -10,7 +10,7 @@ export default class Obstacle extends MovableObjects {
       x: data.x,
       y: data.y,
       texture: data.texture,
-      velocity: -300,
+      velocity: -320,
       scene: data.scene,
     });
     this.setOrigin(0.5, 1);

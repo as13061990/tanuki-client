@@ -1,9 +1,10 @@
 export default class Hero extends Phaser.Physics.Arcade.Sprite {
   public body: Phaser.Physics.Arcade.Body;
   public damaged: boolean;
-  private health: number = 5;
+  private health: number = 3;
   private shield: integer = 0;
-
+  private shieldSprite: Phaser.GameObjects.Sprite;
+  
   public get hasShield(): boolean { return this.shield > 0 };
   public get isDamaged(): boolean { return this.damaged };
   public get currentHealth() { return this.health };
@@ -23,8 +24,11 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.setCollideWorldBounds(true);
     this.body.enable = true;
     this.setDepth(1);
-
+    
     this.body.setGravityY(1000);
+
+    this.shieldSprite = this.scene.add.sprite(this.x + 20, this.y + 20, 'hero-shield').setScale(1.5).setAlpha(0.5).setDepth(1);
+    this.setShieldAnimation();
   }
 
   private jump(): void {
@@ -34,7 +38,25 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   }
 
   public setShield(): void {
-    this.shield = 2000;
+    this.shield = 4000;
+  }
+
+  public incHealth(): void {
+    this.health = this.health >= 3 ? this.health : this.health + 1;
+  }
+
+  public spawnText(str: string): void {
+    const text = this.scene.add.text(this.x, this.y - 150, str, {
+      fontFamily: 'LuckiestGuy',
+      fontSize: '30px',
+      color: '#FEDE17',
+    }).setDepth(2);
+    this.scene.time.addEvent({
+      delay: 1000,
+      callback: () => {
+        text.destroy();
+      },
+    });
   }
 
   protected preUpdate(time: number, delta: number): void {
@@ -46,6 +68,8 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
       this.shield = 0;
     }
 
+    this.shieldSprite.setVisible(this.hasShield);
+    this.shieldSprite.setPosition(this.x + 20, this.y - 10);
     this.playAnimation();
   }
 
@@ -62,6 +86,16 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
         this.play('fly', true);
       }
     }
+  }
+
+  private setShieldAnimation(): void {
+    this.scene.tweens.add({
+      targets: this.shieldSprite,
+      duration: 400, 
+      alpha: { from: 0.3, to: 0.7 },
+      yoyo: true,
+      repeat: -1,
+    });
   }
 
   private setAnimation() {
