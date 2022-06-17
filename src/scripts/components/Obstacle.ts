@@ -1,4 +1,4 @@
-import MovableObjects, { MovableObjectData } from './MovableObjects';
+import MovableObjects from './MovableObjects';
 
 export default class Obstacle extends MovableObjects {
   public type: Obstacles;
@@ -10,11 +10,11 @@ export default class Obstacle extends MovableObjects {
       x: data.x,
       y: data.y,
       texture: data.texture,
-      velocity: -200,
+      velocity: -300,
       scene: data.scene,
     });
-    this.setScale(5);
-    this.body.setCircle(10).setOffset(5, 5);
+    this.setOrigin(0.5, 1);
+    this.setScale(0.22);
     this.type = data.texture;
   }
 };

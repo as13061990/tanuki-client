@@ -19,11 +19,8 @@ window.onload = (): void => {
     let clientHeight: number = Math.round(document.body.clientHeight);
     let clientWidth: number = Math.round(document.body.clientWidth);
     let canvasWidth: number = 720;
-    let canvasHeight: number = Math.round((720 * clientHeight) / clientWidth);
-    
-    if (canvasHeight > 1700) canvasHeight = 1700;
-    else if (canvasHeight < 1200) canvasHeight = 1200;
- 
+    let canvasHeight: number = 1280;
+     
     let x: number = canvasWidth / gcd(canvasHeight, canvasWidth);
     let y: number = canvasHeight / gcd(canvasHeight, canvasWidth);
   
