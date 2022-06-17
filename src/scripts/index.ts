@@ -3,6 +3,7 @@ import * as Phaser from 'phaser';
 import Boot from './scenes/Boot';
 import Preload from './scenes/Preload';
 import Game from './scenes/Game';
+import Start from './scenes/Start';
 
 const gcd = (num1: number, num2: number): number => {
   while (num1 && num2) num1 > num2 ? num1 %= num2 : num2 %= num1;
@@ -53,6 +54,7 @@ window.onload = (): void => {
       scene: [
         Boot,
         Preload,
+        Start,
         Game,
       ],
       loader: { maxParallelDownloads: 128 },

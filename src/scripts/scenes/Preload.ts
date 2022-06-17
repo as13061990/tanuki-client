@@ -8,6 +8,8 @@ const road: string = require('../../assets/images/road.png');
 const bg: string = require('../../assets/images/tiles/bg.png');
 const ground: string = require('../../assets/images/tiles/ground.png');
 const background: string = require('../../assets/images/background.jpg');
+const startBackground: string = require('../../assets/images/start-screen.jpg');
+const startButton: string = require('../../assets/images/start-button.png');
 const policeOfficer: string = require('../../assets/images/obstacles/police-officer.png');
 const trafficCones: string = require('../../assets/images/obstacles/traffic-cones.png');
 const roadSign: string = require('../../assets/images/obstacles/road-sign.png');
@@ -17,6 +19,7 @@ const shield: string = require('../../assets/images/boosts/shield.png');
 const speed: string = require('../../assets/images/boosts/speed.png');
 const rolls: string = require('../../assets/images/boosts/rolls.png');
 const girls: string = require('../../assets/images/boosts/girls.png');
+const whitePixel: string = require('../../assets/images/white-pixel.jpg');
 
 export default class Preload extends Phaser.Scene {
 
@@ -38,9 +41,11 @@ export default class Preload extends Phaser.Scene {
     this.load.image('tile-bg', bg);
     this.load.image('tile-ground', ground);
     this.load.image('background', background);
+    this.load.image('start-screen', startBackground);
+    this.load.image('start-button', startButton);
     this.load.image('city', city);
     this.load.image('road', road);
-
+    this.load.image('white-pixel', whitePixel);
     this.load.image('police-officer', policeOfficer);
     this.load.image('traffic-cones', trafficCones);
     this.load.image('road-sign', roadSign);
@@ -66,7 +71,7 @@ export default class Preload extends Phaser.Scene {
       repeat: -1
     });
     this.scene.stop();
-    this.scene.start('Game');
+    this.scene.start('Start');
   }
 
   private createAnimations(key: string, frameStart: number, frameEnd: number): void {

@@ -11,7 +11,6 @@ export default class ObstacleSpawner extends Phaser.Physics.Arcade.Group {
 
   private init(): void {
     this.scene.add.existing(this);
-    this.spawn(this.getRandomObstacle());
     this.timer = this.scene.time.addEvent({
       delay: 2000,
       callback: () => {
