@@ -93,7 +93,8 @@ export default class Game extends Phaser.Scene {
   }
 
   private endGame(): void {
-    this.scene.restart();
+    this.scene.stop();
+    this.scene.start('Start');
   }
 
   public update(): void {
