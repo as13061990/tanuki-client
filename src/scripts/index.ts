@@ -1,6 +1,7 @@
 import '../css/style.css';
 import * as Phaser from 'phaser';
 import Boot from './scenes/Boot';
+import Preload from './scenes/Preload';
 import Game from './scenes/Game';
 
 const gcd = (num1: number, num2: number): number => {
@@ -51,27 +52,12 @@ window.onload = (): void => {
       },
       scene: [
         Boot,
+        Preload,
         Game,
       ],
       loader: { maxParallelDownloads: 128 },
     }
     
     const game: Phaser.Game = new Phaser.Game(config);
-    window.addEventListener('resize', (): void => {
-      // let clientHeight: number = Math.round(document.body.clientHeight);
-      // let clientWidth: number = Math.round(document.body.clientWidth);
-
-      // if (clientHeight / y > clientWidth / x) {
-      //   width = clientWidth;
-      //   height = clientWidth / x * y;
-      // } else {
-      //   width = clientHeight / y * x;
-      //   height = clientHeight;
-      // }
-    
-      // root.style.height = height + 'px';
-      // root.style.width = width + 'px';
-      game.scale.resize(canvasWidth, canvasHeight);
-    }, false);
   }, 100);
 }
