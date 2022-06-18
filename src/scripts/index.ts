@@ -4,6 +4,7 @@ import Boot from './scenes/Boot';
 import Preload from './scenes/Preload';
 import Game from './scenes/Game';
 import Start from './scenes/Start';
+import Modal from './scenes/Modal';
 
 const gcd = (num1: number, num2: number): number => {
   while (num1 && num2) num1 > num2 ? num1 %= num2 : num2 %= num1;
@@ -56,6 +57,7 @@ window.onload = (): void => {
         Preload,
         Start,
         Game,
+        Modal,
       ],
       loader: { maxParallelDownloads: 128 },
     }

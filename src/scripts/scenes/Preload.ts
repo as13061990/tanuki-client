@@ -20,6 +20,14 @@ const speed: string = require('../../assets/images/boosts/speed.png');
 const rolls: string = require('../../assets/images/boosts/rolls.png');
 const girls: string = require('../../assets/images/boosts/girls.png');
 const whitePixel: string = require('../../assets/images/white-pixel.jpg');
+const modalBackground: string = require('../../assets/images/modal/modal-background.png');
+const checkpoint: string = require('../../assets/images/modal/checkpoint.png');
+const restartButton: string = require('../../assets/images/modal/restart-button.png');
+const resumeButton: string = require('../../assets/images/modal/resume-button.png');
+const endBig: string = require('../../assets/images/modal/end-big.png');
+const endMini: string = require('../../assets/images/modal/end-mini.png');
+const firstPlace: string = require('../../assets/images/modal/first-place.png');
+const nextPlace: string = require('../../assets/images/modal/next-place.png');
 
 export default class Preload extends Phaser.Scene {
 
@@ -56,6 +64,16 @@ export default class Preload extends Phaser.Scene {
     this.load.image('boost-speed', speed);
     this.load.image('boost-rolls', rolls);
     this.load.image('boost-girls', girls);
+    
+    this.load.image('modal-background', modalBackground);
+
+    this.load.image('checkpoint', checkpoint);
+    this.load.image('restart-button', restartButton);
+    this.load.image('resume-button', resumeButton);
+    this.load.image('end-big', endBig);
+    this.load.image('end-mini', endMini);
+    this.load.image('first-place', firstPlace);
+    this.load.image('next-place', nextPlace);
   }
 
   public create(): void {

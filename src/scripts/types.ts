@@ -40,4 +40,5 @@ export {
   StartGameResponse,
   SetNewScoreRequest,
   SetNewScoreResponse,
+  RaitingsUser,
 };

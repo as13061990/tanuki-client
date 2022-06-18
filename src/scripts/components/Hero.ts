@@ -33,7 +33,13 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
 
   private jump(): void {
     this.scene.input.keyboard.createCursorKeys().space.on('down', (): void => {
-      if (this.body.touching.down) this.setVelocityY(-700);
+      if (this.scene.scene.isPaused('Game')) {
+        this.scene.scene.resume('Game');
+      } else {
+        this.scene.scene.launch('Modal');
+        this.scene.scene.pause('Game');
+      }
+      //if (this.body.touching.down) this.setVelocityY(-700);
     });
     this.scene.input.on('pointerdown', (): void => {
       if (this.body.touching.down) this.setVelocityY(-700);
