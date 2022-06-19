@@ -1,3 +1,5 @@
+import { Modals } from "./scenes/Modal";
+
 type BasicRequest = { tgId: string; };
 type BasicResponse = { error: boolean; };
 
@@ -7,29 +9,40 @@ type CheckUserRequest = {
 };
 
 type CheckUserResponse = {
-  points: integer,
-  attempts: integer,
+  points: integer;
+  attempts: integer;
 };
 
-type GetRaitingsRequest = {
-  tgId: string
-};
 
 type GetRaitingsResponse = {
-  raitings: RaitingsUser[],
-  user: RaitingsUser,
+  raitings: RaitingsUser[];
+  user: RaitingsUser;
 };
 
 type RaitingsUser = {
-  place: integer,
-  name: string,
-  points: integer,
+  place: integer;
+  name: string;
+  points: integer;
 };
 
+type SetNewScoreRequest = {
+  tgId: string;
+  points: integer;
+};
+
+type GetRaitingsRequest = BasicRequest;
 type StartGameRequest = BasicRequest;
 type StartGameResponse = BasicResponse;
-type SetNewScoreRequest = BasicRequest;
 type SetNewScoreResponse = BasicResponse;
+
+type State = {
+  tgId: string;
+  name: string;
+  attempts: integer;
+  modal: Modals;
+  currentPoints: integer;
+};
+
 
 export {
   CheckUserRequest,
@@ -41,4 +54,5 @@ export {
   SetNewScoreRequest,
   SetNewScoreResponse,
   RaitingsUser,
+  State,
 };

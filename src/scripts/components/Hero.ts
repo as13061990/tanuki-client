@@ -1,10 +1,14 @@
+import { Modals } from '../scenes/Modal';
+import Game from './../scenes/Game';
+
 export default class Hero extends Phaser.Physics.Arcade.Sprite {
   public body: Phaser.Physics.Arcade.Body;
   public damaged: boolean;
   private health: number = 3;
   private shield: integer = 0;
   private shieldSprite: Phaser.GameObjects.Sprite;
-  
+  public scene: Game;
+
   public get hasShield(): boolean { return this.shield > 0 };
   public get isDamaged(): boolean { return this.damaged };
   public get currentHealth() { return this.health };
@@ -36,7 +40,8 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
       if (this.scene.scene.isPaused('Game')) {
         this.scene.scene.resume('Game');
       } else {
-        this.scene.scene.launch('Modal');
+        this.scene.state.modal = Modals.End;
+        this.scene.scene.launch('Modal', this.scene.state);
         this.scene.scene.pause('Game');
       }
       //if (this.body.touching.down) this.setVelocityY(-700);
@@ -128,7 +133,6 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.damaged = true;
     this.body.setVelocityY(-200);
     this.setAnimation();
-    console.log(this.health);
   }
 };
 

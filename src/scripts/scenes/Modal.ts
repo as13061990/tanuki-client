@@ -1,24 +1,47 @@
+import api from '../libs/Api';
 import Utils from '../libs/Utils';
-import { RaitingsUser } from '../types';
+import { GetRaitingsResponse, RaitingsUser, State } from '../types';
 
 export default class Modal extends Phaser.Scene {
   private bg: Phaser.GameObjects.Sprite;
-  private type: Modals;
+  public state: State;
 
   constructor() {
     super('Modal');
   }
 
+  public init(state: State) {
+    this.state = state;
+  }
+
   public create(): void {
     const { centerX, centerY } = this.cameras.main;
-    console.log('Modal');
     this.bg = this.add.sprite(centerX, centerY, 'modal-background');
-    //this.createCheckpoint();
-    //this.createEndGame();
+    this.bg.setInteractive();
+    switch(this.state.modal) {
+      case Modals.Checkpoint:
+        this.createCheckpoint();
+        break;
+      case Modals.End:
+        api.getRaitings({ tgId: this.state.tgId })
+          .then(data => {
+            this.createEndGame(data);
+          });
+        break;
+      case Modals.Raitings:
+        api.getRaitings({ tgId: this.state.tgId })
+          .then(data => {
+            this.createRaitings(data);
+          });
+        break;
+      default:
+        this.scene.stop(); 
+        break;
+    }
   }
 
   private createCheckpoint(): void {
-    const score = 100;
+    const score = this.state.currentPoints;
     const { centerX, centerY } = this.cameras.main;
     const bg = this.add.sprite(centerX, centerY, 'checkpoint');
     const fontConfig: Phaser.Types.GameObjects.Text.TextStyle = {
@@ -40,43 +63,13 @@ export default class Modal extends Phaser.Scene {
     });
   }
 
-  private createEndGame(): void {
-    const raitings: RaitingsUser[] = [
-      {
-        place: 1,
-        points: 1000,
-        name: 'Василий',
-      },
-      {
-        place: 2,
-        points: 1000,
-        name: 'Федор',
-      },
-      {
-        place: 3,
-        points: 1000,
-        name: 'Клементий',
-      },
-      {
-        place: 4,
-        points: 1000,
-        name: 'Алексей',
-      },
-      {
-        place: 5,
-        points: 1000,
-        name: 'Игнат',
-      }
-    ];
-    const userRaiting: RaitingsUser = {
-      place: 1000,
-      name: 'Пупкин',
-      points: 23,
-    };
+  private createEndGame(data: GetRaitingsResponse): void {
+    const raitings: RaitingsUser[] = data.raitings;
+    const userRaiting: RaitingsUser = data.user;
     const { centerX, centerY } = this.cameras.main;
     const minPoints = 100;
-    const currentPoints = 110;
-    const bg = this.add.sprite(centerX, centerY,  minPoints < currentPoints ? 'end-big' : 'end-mini');
+    const currentPoints = this.state.currentPoints;
+    const bg = this.add.sprite(centerX, centerY,  minPoints < currentPoints ? 'end-big' : 'end-mini').setOrigin(0.5, 0);
 
     const elements: RaitingElement[] = [];
     const offset = 45;
@@ -88,7 +81,7 @@ export default class Modal extends Phaser.Scene {
       currentHeight += raitingElement.displayHeight + offset;
     });
 
-    if (userRaiting.place > 5) {
+    if (userRaiting.place > 5 || raitings.length === 0) {
       const raitingElement = new RaitingElement(this, userRaiting);
       elements.push(raitingElement);
       currentHeight += raitingElement.displayHeight + offset;
@@ -96,7 +89,8 @@ export default class Modal extends Phaser.Scene {
 
     bg.setY(currentHeight / 2 - bg.displayHeight / 2 - offset);
     if (minPoints < currentPoints) {
-      const text = this.add.text(centerX, bg.y + 130, '5050505', {
+      const promo = '12313123'
+      const text = this.add.text(centerX, bg.y + 130, promo, {
         fontSize: '30px',
         fontFamily: 'LuckiestGuy',
       }).setOrigin(0.5);
@@ -115,8 +109,56 @@ export default class Modal extends Phaser.Scene {
 
     const button = this.add.sprite(centerX, elements[elements.length - 1].getBottomCenter().y + 80, 'restart-button');
     Utils.clickButton(this, button, () => {
-      this.scene.stop();
-      this.scene.resume('Game');
+      api.startGame({tgId: this.state.tgId }).then(data => {
+        if (!data.error) {
+          this.state.attempts -= 1;
+          this.scene.stop();
+          this.scene.start('Game', this.state);
+        }
+      });
+    });
+  }
+
+  private createRaitings(data: GetRaitingsResponse): void {
+    const raitings: RaitingsUser[] = data.raitings;
+    const userRaiting: RaitingsUser = data.user;
+    const { centerX, centerY } = this.cameras.main;
+
+    const elements: RaitingElement[] = [];
+    const offset = 45;
+    let currentHeight = 0;
+
+    raitings.forEach(el => {
+      const raitingElement = new RaitingElement(this, el);
+      elements.push(raitingElement);
+      currentHeight += raitingElement.displayHeight + offset;
+    });
+
+    if (userRaiting.place > 5 || raitings.length === 0) {
+      const raitingElement = new RaitingElement(this, userRaiting);
+      elements.push(raitingElement);
+      currentHeight += raitingElement.displayHeight + offset;
+    }
+
+    elements.forEach((el, index) => {
+      if (index > 0) {
+        const previous = elements[index - 1];
+        const previousBottom = previous.getBottomCenter().y;
+        el.setY(previousBottom + offset);
+      } else {
+        el.setY(centerY - currentHeight / 2);
+      }
+    });
+
+    const button = this.add.sprite(centerX, elements[elements.length - 1].getBottomCenter().y + 80, 'start-button');
+    Utils.clickButton(this, button, () => {
+      api.startGame({tgId: this.state.tgId }).then(data => {
+        if (!data.error) {
+          this.state.attempts -= 1;
+          this.scene.stop();
+          this.scene.start('Game', this.state);
+        }
+      });
     });
   }
 }
@@ -166,4 +208,8 @@ class RaitingElement {
 enum Modals {
   Checkpoint,
   End,
+  Raitings,
+  None,
 };
+
+export { Modals };

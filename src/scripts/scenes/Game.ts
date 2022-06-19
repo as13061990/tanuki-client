@@ -5,27 +5,32 @@ import  { Obstacles } from "../components/Obstacle";
 import MovableObjects from './../components/MovableObjects';
 import BoostSpawner from './../components/BoostSpawner';
 import Boost, { Boosts } from '../components/Boost';
+import { State } from '../types';
+import { Modals } from './Modal';
+import api from '../libs/Api';
 
 export default class Game extends Phaser.Scene {
-  private score: number = 0;
   private bg: Phaser.GameObjects.TileSprite;
   private road: Phaser.GameObjects.TileSprite;
   private scoreText: Phaser.GameObjects.Text;
   private hero: Hero;
   private car: Car;
+
+  public state: State;
+
   constructor() {
     super('Game');
   }
 
-  public init(): void {
-    this.score = 0;
+  public init(state: State): void {
+    this.state = state;
+    this.state.currentPoints = 0;
   }
 
   public create(): void {
-    console.log('create, game')
     const { displayWidth, displayHeight, centerX, centerY } = this.cameras.main;
     this.add.sprite(centerX, centerY, 'background');
-    this.scoreText = this.add.text(580, 90, this.score.toString(), {
+    this.scoreText = this.add.text(580, 90, this.state.currentPoints.toString(), {
       fontFamily: 'LuckiestGuy',
       fontSize: '50px',
     }).setOrigin(0.5);
@@ -47,8 +52,6 @@ export default class Game extends Phaser.Scene {
     this.physics.add.overlap(this.hero, boostSpawner, this.onBoostOverlap, undefined, this);
     
     this.createCityBackground();
-
-    console.log(this.score);
   }
 
   public onOverlap(hero: Hero, target: MovableObjects): void {
@@ -62,20 +65,19 @@ export default class Game extends Phaser.Scene {
   } 
 
   public incrementScore(source: Phaser.Physics.Arcade.Sprite, target: MovableObjects): void {
-    this.score += 3;
+    this.state.currentPoints += 3;
     target.destroy();
     this.hero.spawnText('+3');
-    console.log(this.score);
   }
 
   public onBoostOverlap(hero: Hero, boost: Boost) {
     switch (boost.type) {
       case Boosts.Girls:
-        this.score += 50;
+        this.state.currentPoints += 50;
         hero.spawnText('+50');
         break;
       case Boosts.Rolls:
-        this.score += 20;
+        this.state.currentPoints += 20;
         hero.spawnText('+20');
         break;
       case Boosts.Speed:
@@ -93,16 +95,23 @@ export default class Game extends Phaser.Scene {
   }
 
   private endGame(): void {
-    this.scene.stop();
-    this.scene.start('Start');
+    this.scene.pause();
+    api.setNewScore({ tgId: this.state.tgId, points: this.state.currentPoints })
+      .then(data => {
+        if (!data.error) {
+          this.state.currentPoints = 0;
+          this.state.modal = Modals.End;
+          this.scene.launch('Modal', this.state);
+        }
+      });
   }
 
   public update(): void {
     this.bg.tilePositionX += 1;
     this.road.tilePositionX += 1;
 
-    if (this.scoreText.text != this.score.toString()) {
-      this.scoreText.text = this.score.toString();
+    if (this.scoreText.text != this.state.currentPoints.toString()) {
+      this.scoreText.text = this.state.currentPoints.toString();
     }
 
     if (this.hero.currentHealth <= 0) {

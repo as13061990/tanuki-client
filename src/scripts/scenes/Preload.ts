@@ -1,4 +1,5 @@
 import LoadingBar from '../components/LoadingBar';
+import { State } from '../types';
 
 const hero: string = require('../../assets/images/hero/hero.png');
 const heroShield: string = require('../../assets/images/hero/shield.png');
@@ -30,11 +31,15 @@ const firstPlace: string = require('../../assets/images/modal/first-place.png');
 const nextPlace: string = require('../../assets/images/modal/next-place.png');
 
 export default class Preload extends Phaser.Scene {
+  public state: State;
 
   constructor() {
     super('Preload');
   }
 
+  public init(state: State) {
+    this.state = state;
+  }
 
   public preload(): void {
     this.add.sprite(0, 0, 'load-screen').setOrigin(0);
@@ -89,7 +94,7 @@ export default class Preload extends Phaser.Scene {
       repeat: -1
     });
     this.scene.stop();
-    this.scene.start('Start');
+    this.scene.start('Start', this.state);
   }
 
   private createAnimations(key: string, frameStart: number, frameEnd: number): void {

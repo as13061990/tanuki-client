@@ -1,14 +1,23 @@
 import Utils from '../libs/Utils';
+import { State } from '../types';
+import api from './../libs/Api';
+import { Modals } from './Modal';
 
 export default class Start extends Phaser.Scene {
+  public state: State;
+
   constructor() {
     super('Start');
+  }
+
+  public init(state: State) {
+    this.state = state;
   }
 
   public create() {
     this.add.sprite(0, 0, 'start-screen').setOrigin(0);
     const { centerX, centerY } = this.cameras.main;
-    const attempts = 5;
+    const attempts = this.state.attempts;
     const fontConfig: Phaser.Types.GameObjects.Text.TextStyle = {
       fontSize: '24px',
       fontFamily: 'LuckiestGuy',
@@ -23,11 +32,19 @@ export default class Start extends Phaser.Scene {
 
     const button = this.add.sprite(centerX, centerY + 190, 'start-button');
     Utils.clickButton(this, button, () => {
-      this.scene.stop();
-      this.scene.start('Game');
+      api.startGame({tgId: this.state.tgId }).then(data => {
+        if (!data.error) {
+          this.state.attempts -= 1;
+          this.scene.stop();
+          this.scene.start('Game', this.state);
+        }
+      });
     });
 
     const textButton = this.add.text(centerX, centerY + 270, 'Таблица лидеров', fontConfig).setColor('#FEDE17').setOrigin(0.5);
-    const undeline = this.add.sprite(centerX, centerY + 290, 'white-pixel').setSize(textButton.displayWidth, 100).setTint(0xFEDE17);
+    Utils.click(textButton, () => {
+      this.state.modal = Modals.Raitings;
+      this.scene.launch('Modal', this.state);
+    });
   }
 }
