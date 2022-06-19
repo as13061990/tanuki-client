@@ -3,7 +3,6 @@ import MovableObjects from './MovableObjects';
 export default class Obstacle extends MovableObjects {
   public type: Obstacles;
   public flag: Phaser.Physics.Arcade.Body;
-  public scene: Phaser.Scene;
 
   constructor(data: ObstacleData) {
     super({

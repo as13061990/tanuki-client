@@ -3,7 +3,6 @@ import MovableObjects from './MovableObjects';
 export default class Boost extends MovableObjects {
   public type: Boosts;
   public flag: Phaser.Physics.Arcade.Body;
-  public scene: Phaser.Scene;
 
   constructor(data: BoostData) {
     super({
@@ -14,6 +13,7 @@ export default class Boost extends MovableObjects {
       scene: data.scene,
     });
     this.setOrigin(0.5, 1);
+    this.setDepth(1);
     this.type = data.texture;
   }
 };

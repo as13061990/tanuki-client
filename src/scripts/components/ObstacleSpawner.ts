@@ -1,10 +1,12 @@
 import Obstacle, { Obstacles } from "./Obstacle";
+import Game from './../scenes/Game';
 const randomBoolean = [ true, true, true, true, true, false ];
 
 export default class ObstacleSpawner extends Phaser.Physics.Arcade.Group {
   private timer: Phaser.Time.TimerEvent;
-  
-  constructor(scene: Phaser.Scene) {
+  public scene: Game;
+
+  constructor(scene: Game) {
     super(scene.physics.world, scene);
     this.init();
   }
@@ -14,7 +16,7 @@ export default class ObstacleSpawner extends Phaser.Physics.Arcade.Group {
     this.timer = this.scene.time.addEvent({
       delay: 2000,
       callback: () => {
-        if (Phaser.Utils.Array.GetRandom(randomBoolean)) {
+        if (Phaser.Utils.Array.GetRandom(randomBoolean) && !this.scene.pause) {
           this.spawn(this.getRandomObstacle());
         }
       },

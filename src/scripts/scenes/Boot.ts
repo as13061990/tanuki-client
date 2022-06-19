@@ -40,8 +40,8 @@ export default class BootScene extends Phaser.Scene {
   }
 
   private initTestUser(): void {
-    this.state.tgId = '12345678912';
-    this.state.name = 'test user 3';
+    this.state.tgId = '1234567891223';
+    this.state.name = 'test user 5';
   }
 
   private checkUser(): void {

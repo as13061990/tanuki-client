@@ -29,6 +29,9 @@ const endBig: string = require('../../assets/images/modal/end-big.png');
 const endMini: string = require('../../assets/images/modal/end-mini.png');
 const firstPlace: string = require('../../assets/images/modal/first-place.png');
 const nextPlace: string = require('../../assets/images/modal/next-place.png');
+const checkpointAnimation: string = require('../../assets/images/checkpoint/animation.png');
+const checkpointSprite: string = require('../../assets/images/checkpoint/girl.png');
+
 
 export default class Preload extends Phaser.Scene {
   public state: State;
@@ -50,7 +53,9 @@ export default class Preload extends Phaser.Scene {
   private preloadAssets(): void {
     this.load.spritesheet('hero', hero, { frameWidth: 1418, frameHeight: 1521 });
     this.load.spritesheet('car', car, { frameWidth: 2411, frameHeight: 781 });
+    this.load.spritesheet('checkpoint-animation', checkpointAnimation, { frameWidth: 424, frameHeight: 427 });
     this.load.image('hero-shield', heroShield);
+    this.load.image('checkpoint-sprite', checkpointSprite);
     this.load.image('tile-bg', bg);
     this.load.image('tile-ground', ground);
     this.load.image('background', background);
@@ -90,6 +95,13 @@ export default class Preload extends Phaser.Scene {
     this.anims.create({
       key: 'car-move',
       frames: this.anims.generateFrameNumbers('car', { start: 0, end: 3 }),
+      frameRate: 6,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'checkpoint-anim',
+      frames: this.anims.generateFrameNumbers('checkpoint-animation', { start: 0, end: 2 }),
       frameRate: 6,
       repeat: -1
     });

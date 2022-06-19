@@ -8,6 +8,8 @@ import Boost, { Boosts } from '../components/Boost';
 import { State } from '../types';
 import { Modals } from './Modal';
 import api from '../libs/Api';
+import Checkpoint from '../components/Checkpoint';
+import { GameObjects } from 'phaser';
 
 export default class Game extends Phaser.Scene {
   private bg: Phaser.GameObjects.TileSprite;
@@ -16,7 +18,12 @@ export default class Game extends Phaser.Scene {
   private hero: Hero;
   private car: Car;
 
+  public pause: boolean;
+
   public state: State;
+  private checkpoint: Checkpoint;
+
+  private checkpointCount: integer;
 
   constructor() {
     super('Game');
@@ -52,6 +59,10 @@ export default class Game extends Phaser.Scene {
     this.physics.add.overlap(this.hero, boostSpawner, this.onBoostOverlap, undefined, this);
     
     this.createCityBackground();
+
+    this.input.keyboard.createCursorKeys().space.on('down', (): void => {
+      this.createCheckpoint();
+    });
   }
 
   public onOverlap(hero: Hero, target: MovableObjects): void {
@@ -64,8 +75,40 @@ export default class Game extends Phaser.Scene {
     }
   } 
 
+  private createCheckpoint(): void {
+    this.checkpoint = new Checkpoint(this);
+    this.physics.add.overlap(this.hero, this.checkpoint, this.onCheckpointOverlap, undefined, this);
+  }
+
+  private onCheckpointOverlap(hero: Hero, target: Checkpoint): void {
+    this.checkpoint.destroy();
+    this.checkpoint = null;
+  }
+
+  public setPause(anim: Phaser.GameObjects.Sprite): void {
+    this.pause = true;
+    this.hero.setVisible(false);
+    this.time.addEvent({
+      delay: 500,
+      callback: () => {
+        this.scene.pause();
+        this.state.modal = Modals.Checkpoint;
+        this.scene.launch('Modal', this.state);
+        anim.destroy();
+        this.checkpointCount = 0;
+      }
+    });
+  }
+
+  public setResume(): void {
+    this.pause = false;
+    this.hero.setVisible(true);
+    this.scene.resume();
+  }
+
   public incrementScore(source: Phaser.Physics.Arcade.Sprite, target: MovableObjects): void {
     this.state.currentPoints += 3;
+    this.checkpointCount += 3;
     target.destroy();
     this.hero.spawnText('+3');
   }
@@ -74,10 +117,12 @@ export default class Game extends Phaser.Scene {
     switch (boost.type) {
       case Boosts.Girls:
         this.state.currentPoints += 50;
+        this.checkpointCount += 50;
         hero.spawnText('+50');
         break;
       case Boosts.Rolls:
         this.state.currentPoints += 20;
+        this.checkpointCount += 20;
         hero.spawnText('+20');
         break;
       case Boosts.Speed:
@@ -107,6 +152,7 @@ export default class Game extends Phaser.Scene {
   }
 
   public update(): void {
+    if (this.pause) return;
     this.bg.tilePositionX += 1;
     this.road.tilePositionX += 1;
 
@@ -116,6 +162,10 @@ export default class Game extends Phaser.Scene {
 
     if (this.hero.currentHealth <= 0) {
       this.endGame();
+    }
+
+    if (this.checkpointCount > 1000 && !this.checkpoint) {
+      this.createCheckpoint();
     }
   }
 

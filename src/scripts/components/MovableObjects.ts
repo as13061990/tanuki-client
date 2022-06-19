@@ -1,7 +1,10 @@
+import Game from './../scenes/Game';
+
 export default class MovableObjects extends Phaser.Physics.Arcade.Sprite {
   public body: Phaser.Physics.Arcade.Body;
   public velocity: number;
   public timer: Phaser.Time.TimerEvent;
+  public scene: Game;
 
   constructor(data: MovableObjectData) {
     super(data.scene, data.x, data.y, data.texture, data.frame);
@@ -33,7 +36,7 @@ export default class MovableObjects extends Phaser.Physics.Arcade.Sprite {
   }
 
   public update(): void {
-    if (this.active && this.isDead()) {
+    if (this.active && this.isDead() || this.scene.pause) {
       this.setAlive(false);
     }
   }
@@ -46,10 +49,6 @@ export default class MovableObjects extends Phaser.Physics.Arcade.Sprite {
     if (this.timer) {
         this.timer.paused = !state;
     }
-    if (!state){
-      this.emit('killed');
-    }
-
   }
 
   public move():void {

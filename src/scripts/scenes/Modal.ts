@@ -1,10 +1,12 @@
 import api from '../libs/Api';
 import Utils from '../libs/Utils';
 import { GetRaitingsResponse, RaitingsUser, State } from '../types';
+import Game from './Game';
 
 export default class Modal extends Phaser.Scene {
   private bg: Phaser.GameObjects.Sprite;
   public state: State;
+  private gameScene: Game;
 
   constructor() {
     super('Modal');
@@ -12,6 +14,7 @@ export default class Modal extends Phaser.Scene {
 
   public init(state: State) {
     this.state = state;
+    this.gameScene = this.scene.get('Game') as Game;
   }
 
   public create(): void {
@@ -59,7 +62,7 @@ export default class Modal extends Phaser.Scene {
     const button = this.add.sprite(centerX, centerY + 140, 'resume-button');
     Utils.clickButton(this, button, () => {
       this.scene.stop();
-      this.scene.resume('Game');
+      this.gameScene.setResume();
     });
   }
 

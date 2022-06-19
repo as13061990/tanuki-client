@@ -36,19 +36,14 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   }
 
   private jump(): void {
-    this.scene.input.keyboard.createCursorKeys().space.on('down', (): void => {
-      if (this.scene.scene.isPaused('Game')) {
-        this.scene.scene.resume('Game');
-      } else {
-        this.scene.state.modal = Modals.End;
-        this.scene.scene.launch('Modal', this.scene.state);
-        this.scene.scene.pause('Game');
-      }
-      //if (this.body.touching.down) this.setVelocityY(-700);
-    });
     this.scene.input.on('pointerdown', (): void => {
       if (this.body.touching.down) this.setVelocityY(-700);
     });
+  }
+
+  public setVisible(value: boolean): this {
+    this.shieldSprite.setVisible(value);
+    return super.setVisible(value);
   }
 
   public setShield(): void {
@@ -76,7 +71,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   protected preUpdate(time: number, delta: number): void {
     super.preUpdate(time, delta);
     
-    if (this.hasShield) {
+    if (this.hasShield && !this.scene.pause) {
       this.shield -= delta;
     } else {
       this.shield = 0;
