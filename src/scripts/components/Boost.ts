@@ -1,4 +1,5 @@
 import MovableObjects from './MovableObjects';
+import Game from './../scenes/Game';
 
 export default class Boost extends MovableObjects {
   public type: Boosts;
@@ -9,7 +10,6 @@ export default class Boost extends MovableObjects {
       x: data.x,
       y: data.y,
       texture: data.texture,
-      velocity: -320,
       scene: data.scene,
     });
     this.setOrigin(0.5, 1);
@@ -19,7 +19,7 @@ export default class Boost extends MovableObjects {
 };
 
 type BoostData = {
-  scene: Phaser.Scene,
+  scene: Game,
   x: number,
   y: number,
   texture: Boosts,

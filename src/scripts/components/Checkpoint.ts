@@ -12,7 +12,6 @@ export default class Checkpoint extends MovableObjects {
       x: x, 
       y: y, 
       texture: 'checkpoint-sprite', 
-      velocity: -320 
     });
     this.setOrigin(0.5, 1);
     this.move();

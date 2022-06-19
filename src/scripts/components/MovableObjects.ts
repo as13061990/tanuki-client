@@ -2,12 +2,13 @@ import Game from './../scenes/Game';
 
 export default class MovableObjects extends Phaser.Physics.Arcade.Sprite {
   public body: Phaser.Physics.Arcade.Body;
-  public velocity: number;
+  private velocity: number;
   public timer: Phaser.Time.TimerEvent;
   public scene: Game;
 
   constructor(data: MovableObjectData) {
     super(data.scene, data.x, data.y, data.texture, data.frame);
+    this.velocity = -data.scene.currentVelocity;
     if (data.origin) this.setOrigin(data.origin.x, data.origin.y);
 
     this.init(data);
@@ -17,7 +18,6 @@ export default class MovableObjects extends Phaser.Physics.Arcade.Sprite {
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
     this.body.enable = true;
-    this.velocity = data.velocity;
   }
 
   public reset(x: number, y: number): void {
@@ -57,11 +57,11 @@ export default class MovableObjects extends Phaser.Physics.Arcade.Sprite {
 }
 
 type MovableObjectData = {
-  scene: Phaser.Scene,
+  scene: Game,
   x: number,
   y: number,
   texture: string,
-  velocity: number,
+  velocity?: number,
   frame?: string,
   origin?: {x: number, y: number}
 };

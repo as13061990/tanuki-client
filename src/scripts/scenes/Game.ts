@@ -15,13 +15,15 @@ export default class Game extends Phaser.Scene {
   private scoreText: Phaser.GameObjects.Text;
   private hero: Hero;
   private car: Car;
-
+  public currentVelocity: number = 300;
+  private readonly minVelocity: number = 320;
+  private readonly maxVelocity: number = 1000;
   public pause: boolean;
 
   public state: State;
   private checkpoint: Checkpoint;
 
-  private checkpointCount: integer;
+  private checkpointCount: integer = 0;
 
   constructor() {
     super('Game');
@@ -131,6 +133,7 @@ export default class Game extends Phaser.Scene {
     }
 
     boost.destroy();
+    console.log(this.checkpointCount);
   }
 
   private endGame(): void {
@@ -158,9 +161,16 @@ export default class Game extends Phaser.Scene {
       this.endGame();
     }
 
-    if (this.checkpointCount > 1000 && !this.checkpoint) {
+    if (this.checkpointCount > 500 && !this.checkpoint) {
       this.createCheckpoint();
     }
+
+    let velocity = this.minVelocity;
+    const pointsOffset = 200;
+    if (this.state.currentPoints > pointsOffset) {
+      velocity += this.state.currentPoints - pointsOffset;
+    }
+    this.currentVelocity = Math.min(velocity, this.maxVelocity);
   }
 
   private createCityBackground(): void {

@@ -1,4 +1,5 @@
 import MovableObjects from './MovableObjects';
+import Game from './../scenes/Game';
 
 export default class Obstacle extends MovableObjects {
   public type: Obstacles;
@@ -9,7 +10,6 @@ export default class Obstacle extends MovableObjects {
       x: data.x,
       y: data.y,
       texture: data.texture,
-      velocity: -320,
       scene: data.scene,
     });
     this.setOrigin(0.5, 1);
@@ -19,7 +19,7 @@ export default class Obstacle extends MovableObjects {
 };
 
 type ObstacleData = {
-  scene: Phaser.Scene,
+  scene: Game,
   x: number,
   y: number,
   texture: Obstacles,

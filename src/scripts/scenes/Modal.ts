@@ -90,7 +90,7 @@ export default class Modal extends Phaser.Scene {
       currentHeight += raitingElement.displayHeight + offset;
     }
 
-    bg.setY(currentHeight / 2 + bg.displayHeight / 2 - offset);
+    bg.setY(currentHeight / 2 - bg.displayHeight / 2 - offset);
     if (minPoints < currentPoints) {
       const promo = '12313123'
       const text = this.add.text(centerX, bg.y + 130, promo, {
