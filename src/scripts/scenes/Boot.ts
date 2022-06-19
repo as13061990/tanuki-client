@@ -32,7 +32,7 @@ export default class BootScene extends Phaser.Scene {
     //@ts-ignore
     window.Telegram.WebApp.ready();
 
-    this.state.tgId = "39839876"
+    this.state.tgId = "398398761"
     this.state.name = 'Неизвестный игрок';
     try {
       //@ts-ignore
