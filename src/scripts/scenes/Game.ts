@@ -13,7 +13,7 @@ export default class Game extends Phaser.Scene {
   private bg: Phaser.GameObjects.TileSprite;
   private road: Phaser.GameObjects.TileSprite;
   private scoreText: Phaser.GameObjects.Text;
-  private hero: Hero;
+  public hero: Hero;
   private car: Car;
   public currentVelocity: number = 300;
   private readonly minVelocity: number = 320;
@@ -24,6 +24,8 @@ export default class Game extends Phaser.Scene {
   private checkpoint: Checkpoint;
 
   private checkpointCount: integer = 0;
+  private timer: Phaser.Time.TimerEvent;
+  obstacleSpawner: ObstacleSpawner;
 
   constructor() {
     super('Game');
@@ -51,14 +53,15 @@ export default class Game extends Phaser.Scene {
 
     this.physics.add.collider(this.hero, groundGroup);
 
-    const obstacleSpawner = new ObstacleSpawner(this);
+    this.obstacleSpawner = new ObstacleSpawner(this);
     const boostSpawner = new BoostSpawner(this);
 
-    this.physics.add.overlap(this.hero, obstacleSpawner, this.onOverlap, undefined, this);
-    this.physics.add.overlap(this.car, obstacleSpawner, this.incrementScore, undefined, this);
+    this.physics.add.overlap(this.hero, this.obstacleSpawner, this.onOverlap, undefined, this);
+    this.physics.add.overlap(this.car, this.obstacleSpawner, this.incrementScore, undefined, this);
     this.physics.add.overlap(this.hero, boostSpawner, this.onBoostOverlap, undefined, this);
     
     this.createCityBackground();
+    this.createTimer();
   }
 
   public onOverlap(hero: Hero, target: MovableObjects): void {
@@ -68,6 +71,7 @@ export default class Game extends Phaser.Scene {
       target.destroy();
       hero.takeDamage();
       this.car.move(hero.currentHealth);
+      this.sound.play('police', { name: '12', duration: 3 });
     }
   } 
 
@@ -84,8 +88,9 @@ export default class Game extends Phaser.Scene {
   public setPause(anim: Phaser.GameObjects.Sprite): void {
     this.pause = true;
     this.hero.setVisible(false);
+    this.sound.play('checkpoint', { name: 'checkpoint', duration: 3 } );
     this.time.addEvent({
-      delay: 500,
+      delay: 2000,
       callback: () => {
         this.scene.pause();
         this.state.modal = Modals.Checkpoint;
@@ -96,10 +101,23 @@ export default class Game extends Phaser.Scene {
     });
   }
 
+  private createTimer(): void {
+    this.timer = this.time.addEvent({
+      delay: 1000,
+      callback: () => {
+        if (this.pause) return;
+        this.checkpointCount += 1;
+        this.state.currentPoints += 2;
+      },
+      loop: true,
+    });
+  }
+
   public setResume(): void {
     this.pause = false;
     this.hero.setVisible(true);
     this.scene.resume();
+    this.obstacleSpawner.updateTimer();
   }
 
   public incrementScore(source: Phaser.Physics.Arcade.Sprite, target: MovableObjects): void {
@@ -113,27 +131,28 @@ export default class Game extends Phaser.Scene {
     switch (boost.type) {
       case Boosts.Girls:
         this.state.currentPoints += 50;
-        this.checkpointCount += 50;
+        this.sound.play('boost-girls');
         hero.spawnText('+50');
         break;
       case Boosts.Rolls:
         this.state.currentPoints += 20;
-        this.checkpointCount += 20;
+        this.sound.play('boost-rolls');
         hero.spawnText('+20');
         break;
       case Boosts.Speed:
+        this.sound.play('boost');
         if (hero.currentHealth < 3) {
           hero.incHealth();
           this.car.move(hero.currentHealth);
         }
         break;
       case Boosts.Shield:
+        this.sound.play('boost');
         hero.setShield();
         break;
     }
 
     boost.destroy();
-    console.log(this.checkpointCount);
   }
 
   private endGame(): void {
@@ -161,14 +180,14 @@ export default class Game extends Phaser.Scene {
       this.endGame();
     }
 
-    if (this.checkpointCount > 500 && !this.checkpoint) {
+    if (this.checkpointCount > 60 && !this.checkpoint) {
       this.createCheckpoint();
     }
 
     let velocity = this.minVelocity;
     const pointsOffset = 200;
     if (this.state.currentPoints > pointsOffset) {
-      velocity += this.state.currentPoints - pointsOffset;
+      velocity += (this.state.currentPoints - pointsOffset) / 2;
     }
     this.currentVelocity = Math.min(velocity, this.maxVelocity);
   }

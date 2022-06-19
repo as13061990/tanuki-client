@@ -15,6 +15,7 @@ export default class Start extends Phaser.Scene {
   }
 
   public create() {
+    this.sound.play('main', { loop: true, volume: 0.7 });
     this.add.sprite(0, 0, 'start-screen').setOrigin(0);
     const { centerX, centerY } = this.cameras.main;
     const attempts = this.state.attempts;

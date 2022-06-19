@@ -32,5 +32,11 @@ enum Boosts {
   Girls = 'boost-girls',
 }
 
-export { BoostData, Boosts };
+enum BoostsWithoutSpeed {
+  Shield = 'boost-shield',
+  Rolls = 'boost-rolls',
+  Girls = 'boost-girls',
+}
+
+export { BoostData, Boosts, BoostsWithoutSpeed };
 

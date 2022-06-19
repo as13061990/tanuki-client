@@ -32,6 +32,13 @@ const nextPlace: string = require('../../assets/images/modal/next-place.png');
 const checkpointAnimation: string = require('../../assets/images/checkpoint/animation.png');
 const checkpointSprite: string = require('../../assets/images/checkpoint/girl.png');
 
+const boostGirls: string = require('../../assets/sounds/boost-girl.mp3');
+const boostRolls: string = require('../../assets/sounds/boost-rolls.mp3');
+const boost: string = require('../../assets/sounds/boost.mp3');
+const checkpointSound: string = require('../../assets/sounds/checkpoint.mp3');
+const jump: string = require('../../assets/sounds/jump.mp3');
+const main: string = require('../../assets/sounds/main.mp3');
+const police: string = require('../../assets/sounds/police.mp3');
 
 export default class Preload extends Phaser.Scene {
   public state: State;
@@ -84,6 +91,14 @@ export default class Preload extends Phaser.Scene {
     this.load.image('end-mini', endMini);
     this.load.image('first-place', firstPlace);
     this.load.image('next-place', nextPlace);
+
+    this.load.audio('boost-girls', boostGirls);
+    this.load.audio('boost-rolls', boostRolls);
+    this.load.audio('boost', boost);
+    this.load.audio('checkpoint', checkpointSound);
+    this.load.audio('jump', jump);
+    this.load.audio('main', main);
+    this.load.audio('police', police);
   }
 
   public create(): void {

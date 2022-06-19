@@ -1,4 +1,4 @@
-import Boost, { Boosts } from "./Boost";
+import Boost, { Boosts, BoostsWithoutSpeed } from "./Boost";
 import Game from './../scenes/Game';
 const randomBoolean = [ true, false, false, false ];
 export default class BoostSpawner extends Phaser.Physics.Arcade.Group {
@@ -28,7 +28,7 @@ export default class BoostSpawner extends Phaser.Physics.Arcade.Group {
   }
 
   private getRandomBoost(): Boosts {
-    return Phaser.Utils.Array.GetRandom(Object.values(Boosts));
+    return Phaser.Utils.Array.GetRandom(Object.values(this.scene.hero.currentHealth >= 3 ? BoostsWithoutSpeed : Boosts));
   }
 
   private spawn(type: Boosts): void {

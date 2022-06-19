@@ -13,8 +13,14 @@ export default class ObstacleSpawner extends Phaser.Physics.Arcade.Group {
 
   private init(): void {
     this.scene.add.existing(this);
+    this.updateTimer();
+  }
+
+  public updateTimer(): void {
+    this.timer?.destroy();
+    const delay = this.scene.currentVelocity > 500 ? 1200 : 2000;
     this.timer = this.scene.time.addEvent({
-      delay: 2000,
+      delay: delay,
       callback: () => {
         if (Phaser.Utils.Array.GetRandom(randomBoolean) && !this.scene.pause) {
           this.spawn(this.getRandomObstacle());

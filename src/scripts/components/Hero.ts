@@ -37,7 +37,10 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
 
   private jump(): void {
     this.scene.input.on('pointerdown', (): void => {
-      if (this.body.touching.down) this.setVelocityY(-700);
+      if (this.body.touching.down) {
+        this.setVelocityY(-700);
+        this.scene.sound.play('jump');
+      }
     });
   }
 
@@ -47,7 +50,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
   }
 
   public setShield(): void {
-    this.shield = 4000;
+    this.shield = 10000;
   }
 
   public incHealth(): void {
