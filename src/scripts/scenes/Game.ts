@@ -1,7 +1,6 @@
 import Hero from './../components/Hero';
 import Car from './../components/Car';
 import ObstacleSpawner from '../components/ObstacleSpawner';
-import  { Obstacles } from "../components/Obstacle";
 import MovableObjects from './../components/MovableObjects';
 import BoostSpawner from './../components/BoostSpawner';
 import Boost, { Boosts } from '../components/Boost';
@@ -9,7 +8,6 @@ import { State } from '../types';
 import { Modals } from './Modal';
 import api from '../libs/Api';
 import Checkpoint from '../components/Checkpoint';
-import { GameObjects } from 'phaser';
 
 export default class Game extends Phaser.Scene {
   private bg: Phaser.GameObjects.TileSprite;

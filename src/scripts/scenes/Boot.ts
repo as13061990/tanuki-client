@@ -24,24 +24,24 @@ export default class BootScene extends Phaser.Scene {
       active: () => { this.fontsReady = true },
     });
 
-    //this.initTgUser();
-    this.initTestUser();
+    this.initTgUser();
     this.checkUser();
   }
 
   private initTgUser(): void {
     //@ts-ignore
     window.Telegram.WebApp.ready();
-    //@ts-ignore
-    const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
-    this.state.tgId = userId;
-    //@ts-ignore
-    this.state.name = window.Telegram.WebApp.initDataUnsafe.user.first_name;
-  }
 
-  private initTestUser(): void {
-    this.state.tgId = '1234567891223';
-    this.state.name = 'test user 5';
+    this.state.tgId = "39839876"
+    this.state.name = 'Неизвестный игрок';
+    try {
+      //@ts-ignore
+      this.state.tgId  = window.Telegram.WebApp.initDataUnsafe.user.id
+      //@ts-ignore
+      this.state.name = window.Telegram.WebApp.initDataUnsafe.user.first_name;
+    }
+    catch (e) {
+    }
   }
 
   private checkUser(): void {
