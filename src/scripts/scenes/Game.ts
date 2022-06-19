@@ -57,10 +57,6 @@ export default class Game extends Phaser.Scene {
     this.physics.add.overlap(this.hero, boostSpawner, this.onBoostOverlap, undefined, this);
     
     this.createCityBackground();
-
-    this.input.keyboard.createCursorKeys().space.on('down', (): void => {
-      this.createCheckpoint();
-    });
   }
 
   public onOverlap(hero: Hero, target: MovableObjects): void {

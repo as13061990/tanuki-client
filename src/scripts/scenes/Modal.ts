@@ -90,7 +90,7 @@ export default class Modal extends Phaser.Scene {
       currentHeight += raitingElement.displayHeight + offset;
     }
 
-    bg.setY(currentHeight / 2 - bg.displayHeight / 2 - offset);
+    bg.setY(currentHeight / 2 + bg.displayHeight / 2 - offset);
     if (minPoints < currentPoints) {
       const promo = '12313123'
       const text = this.add.text(centerX, bg.y + 130, promo, {
@@ -194,7 +194,8 @@ class RaitingElement {
     };
     this.bg = this.scene.add.sprite(centerX, centerY, this.data.place === 1 ? 'first-place' : 'next-place');
     this.place = this.scene.add.text(centerX - 280, centerY, `#${this.data.place}`, config).setOrigin(0, 0.5);
-    this.name = this.scene.add.text(centerX - 140, centerY, `${this.data.name}`, config).setOrigin(0, 0.5);
+    const nameStr = this.data.name.length > 16 ? this.data.name.substring(0, 13) + '...' : this.data.name;
+    this.name = this.scene.add.text(centerX - 190, centerY, nameStr, config).setOrigin(0, 0.5);
     this.points = this.scene.add.text(centerX + 280, centerY, `${this.data.points}`, config).setOrigin(1, 0.5);
   }
 
