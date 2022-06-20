@@ -39,6 +39,8 @@ export default class Game extends Phaser.Scene {
   public create(): void {
     const { displayWidth, displayHeight, centerX, centerY } = this.cameras.main;
     this.add.sprite(centerX, centerY, 'background');
+    this.createCityBackground();
+
     this.scoreText = this.add.text(580, 90, this.state.currentPoints.toString(), {
       fontFamily: 'LuckiestGuy',
       fontSize: '50px',
@@ -60,13 +62,14 @@ export default class Game extends Phaser.Scene {
     this.physics.add.overlap(this.car, this.obstacleSpawner, this.incrementScore, undefined, this);
     this.physics.add.overlap(this.hero, boostSpawner, this.onBoostOverlap, undefined, this);
     
-    this.createCityBackground();
     this.createTimer();
   }
 
   public onOverlap(hero: Hero, target: MovableObjects): void {
     if (hero.isDamaged || hero.hasShield) {
       target.destroy();
+      this.state.currentPoints += 3;
+      this.hero.spawnText('+3');
     } else {
       target.destroy();
       hero.takeDamage();
@@ -169,8 +172,6 @@ export default class Game extends Phaser.Scene {
 
   public update(): void {
     if (this.pause) return;
-    this.bg.tilePositionX += 1;
-    this.road.tilePositionX += 1;
 
     if (this.scoreText.text != this.state.currentPoints.toString()) {
       this.scoreText.text = this.state.currentPoints.toString();
@@ -190,10 +191,13 @@ export default class Game extends Phaser.Scene {
       velocity += (this.state.currentPoints - pointsOffset) / 2;
     }
     this.currentVelocity = Math.min(velocity, this.maxVelocity);
+
+    this.bg.tilePositionX += this.currentVelocity / this.minVelocity * 2.2;
+    this.road.tilePositionX += this.currentVelocity / this.minVelocity * 2.2;
   }
 
   private createCityBackground(): void {
-    this.bg = this.add.tileSprite(0, this.cameras.main.displayHeight - 400, this.cameras.main.displayWidth, 564, 'city').setOrigin(0, 1);
     this.road = this.add.tileSprite(0, this.cameras.main.displayHeight - 150, this.cameras.main.displayWidth, 254, 'road').setOrigin(0, 1);
+    this.bg = this.add.tileSprite(0, this.cameras.main.displayHeight - 335, this.cameras.main.displayWidth, 751, 'city').setOrigin(0, 1);
   }
 };

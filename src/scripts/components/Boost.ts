@@ -13,7 +13,7 @@ export default class Boost extends MovableObjects {
       scene: data.scene,
     });
     this.setOrigin(0.5, 1);
-    this.setDepth(1);
+    this.setDepth(2);
     this.type = data.texture;
   }
 };

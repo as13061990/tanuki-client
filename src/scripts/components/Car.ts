@@ -7,7 +7,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.scene.add.existing(this);
     this.play('car-move');
     this.setScale(0.15);
-    this.setDepth(1);
+    this.setDepth(2);
     this.scene.physics.add.existing(this);
     this.body.enable = true;
     this.body.setSize(5, this.scene.cameras.main.displayHeight);

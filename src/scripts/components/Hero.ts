@@ -27,7 +27,7 @@ export default class Hero extends Phaser.Physics.Arcade.Sprite {
     this.body.setCircle(400).setOffset(600, 500);
     this.setCollideWorldBounds(true);
     this.body.enable = true;
-    this.setDepth(1);
+    this.setDepth(2);
     
     this.body.setGravityY(1000);
 

@@ -13,6 +13,7 @@ export default class Obstacle extends MovableObjects {
       scene: data.scene,
     });
     this.setOrigin(0.5, 1);
+    this.setDepth(1);
     this.setScale(0.22);
     this.type = data.texture;
   }
