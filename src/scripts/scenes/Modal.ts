@@ -70,8 +70,9 @@ export default class Modal extends Phaser.Scene {
     const raitings: RaitingsUser[] = data.raitings;
     const userRaiting: RaitingsUser = data.user;
     const { centerX, centerY } = this.cameras.main;
-    const minPoints = 100;
+    const minPoints = 900;
     const currentPoints = this.state.currentPoints;
+    this.state.currentPoints = 0;
     const bg = this.add.sprite(centerX, centerY,  minPoints < currentPoints ? 'end-big' : 'end-mini').setOrigin(0.5, 0);
 
     const elements: RaitingElement[] = [];
@@ -92,8 +93,8 @@ export default class Modal extends Phaser.Scene {
 
     bg.setY(currentHeight / 2 - bg.displayHeight / 2 - offset);
     if (minPoints < currentPoints) {
-      const promo = '12313123'
-      const text = this.add.text(centerX, bg.y + 130, promo, {
+      const promo = 'BEGI'
+      const text = this.add.text(centerX, bg.getCenter().y + 130, promo, {
         fontSize: '30px',
         fontFamily: 'LuckiestGuy',
       }).setOrigin(0.5);
@@ -110,7 +111,8 @@ export default class Modal extends Phaser.Scene {
       }
     });
 
-    const button = this.add.sprite(centerX, elements[elements.length - 1].getBottomCenter().y + 80, 'restart-button');
+    const button = this.add.sprite(centerX, elements[elements.length - 1].getBottomCenter().y + 80, this.state.attempts > 0 ? 'restart-button' : 'restart-button-disable');
+    
     Utils.clickButton(this, button, () => {
       api.startGame({tgId: this.state.tgId }).then(data => {
         if (!data.error) {
@@ -153,7 +155,7 @@ export default class Modal extends Phaser.Scene {
       }
     });
 
-    const button = this.add.sprite(centerX, elements[elements.length - 1].getBottomCenter().y + 80, 'start-button');
+    const button = this.add.sprite(centerX, elements[elements.length - 1].getBottomCenter().y + 80, this.state.attempts > 0 ? 'start-button' : 'start-button-disable');
     Utils.clickButton(this, button, () => {
       api.startGame({tgId: this.state.tgId }).then(data => {
         if (!data.error) {

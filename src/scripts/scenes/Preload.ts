@@ -39,7 +39,8 @@ const checkpointSound: string = require('../../assets/sounds/checkpoint.mp3');
 const jump: string = require('../../assets/sounds/jump.mp3');
 const main: string = require('../../assets/sounds/main.mp3');
 const police: string = require('../../assets/sounds/police.mp3');
-
+const startButtonDisable: string = require('../../assets/images/start-button-disable.png');
+const restartButtonDisable: string = require('../../assets/images/modal/restart-button-disable.png');
 export default class Preload extends Phaser.Scene {
   public state: State;
 
@@ -68,6 +69,7 @@ export default class Preload extends Phaser.Scene {
     this.load.image('background', background);
     this.load.image('start-screen', startBackground);
     this.load.image('start-button', startButton);
+    this.load.image('start-button-disable', startButtonDisable);
     this.load.image('city', city);
     this.load.image('road', road);
     this.load.image('white-pixel', whitePixel);
@@ -86,6 +88,7 @@ export default class Preload extends Phaser.Scene {
 
     this.load.image('checkpoint', checkpoint);
     this.load.image('restart-button', restartButton);
+    this.load.image('restart-button-disable', restartButtonDisable);
     this.load.image('resume-button', resumeButton);
     this.load.image('end-big', endBig);
     this.load.image('end-mini', endMini);

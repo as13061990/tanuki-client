@@ -31,7 +31,7 @@ export default class Start extends Phaser.Scene {
     text1.setX(centerX - halfWidth);
     text2.setX(text1.getRightCenter().x + 5);
 
-    const button = this.add.sprite(centerX, centerY + 190, 'start-button');
+    const button = this.add.sprite(centerX, centerY + 190, this.state.attempts > 0 ? 'start-button' : 'start-button-disable');
     Utils.clickButton(this, button, () => {
       api.startGame({tgId: this.state.tgId }).then(data => {
         if (!data.error) {

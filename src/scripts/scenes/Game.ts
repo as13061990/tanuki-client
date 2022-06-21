@@ -163,7 +163,6 @@ export default class Game extends Phaser.Scene {
     api.setNewScore({ tgId: this.state.tgId, points: this.state.currentPoints })
       .then(data => {
         if (!data.error) {
-          this.state.currentPoints = 0;
           this.state.modal = Modals.End;
           this.scene.launch('Modal', this.state);
         }
