@@ -70,7 +70,7 @@ export default class Modal extends Phaser.Scene {
     const raitings: RaitingsUser[] = data.raitings;
     const userRaiting: RaitingsUser = data.user;
     const { centerX, centerY } = this.cameras.main;
-    const minPoints = 900;
+    const minPoints = 500;
     const currentPoints = this.state.currentPoints;
     this.state.currentPoints = 0;
     const bg = this.add.sprite(centerX, centerY,  minPoints < currentPoints ? 'end-big' : 'end-mini').setOrigin(0.5, 0);
